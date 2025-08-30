@@ -3,7 +3,7 @@ name: Build and Push Docker Compose Images
 on:
   push:
     branches: [ master ]
-#testing automtion on feature branches.
+#testing automated build and push of doker compose files
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
