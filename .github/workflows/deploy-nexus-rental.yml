@@ -17,7 +17,7 @@ jobs:
 
     - name: Login to Docker Hub
       run: |
-        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_dellyn }}" --password-stdin
 
     - name: Build images with Docker Compose
       run: docker compose build
@@ -32,7 +32,7 @@ jobs:
     - name: Tag and push most recent images
       run: |
         SHORT_SHA=$(git rev-parse --short HEAD)
-        USERNAME="${{ secrets.DOCKERHUB_USERNAME }}"
+        dellyn="${{ secrets.DOCKERHUB_dellyn }}"
         
         # Get the most recently built images (assuming they're the ones we want)
         recent_images=$(docker images --filter "dangling=false" --format "{{.ID}} {{.Repository}}" | sort -r | head -5)
@@ -55,11 +55,11 @@ jobs:
             image_id=$(echo "$recent_images" | sed -n "${i}p" | awk '{print $1}')
             echo "Tagging $service with image $image_id"
             
-            docker tag $image_id $USERNAME/class-restuarants-$service:$SHORT_SHA
-            docker tag $image_id $USERNAME/class-restuarants-$service:latest
+            docker tag $image_id $dellyn/class-restuarants-$service:$SHORT_SHA
+            docker tag $image_id $dellyn/class-restuarants-$service:latest
             
-            docker push $USERNAME/class-restuarants-$service:$SHORT_SHA
-            docker push $USERNAME/class-restuarants-$service:latest
+            docker push $dellyn/class-restuarants-$service:$SHORT_SHA
+            docker push $dellyn/class-restuarants-$service:latest
             
             i=$((i+1))
           done
@@ -71,11 +71,11 @@ jobs:
             if [ -n "$image_id" ]; then
               echo "Tagging $service with image $image_id"
               
-              docker tag $image_id $USERNAME/class-restuarants-$service:$SHORT_SHA
-              docker tag $image_id $USERNAME/class-restuarants-$service:latest
+              docker tag $image_id $dellyn/class-restuarants-$service:$SHORT_SHA
+              docker tag $image_id $dellyn/class-restuarants-$service:latest
               
-              docker push $USERNAME/class-restuarants-$service:$SHORT_SHA
-              docker push $USERNAME/class-restuarants-$service:latest
+              docker push $dellyn/class-restuarants-$service:$SHORT_SHA
+              docker push $dellyn/class-restuarants-$service:latest
               
               i=$((i+1))
             fi
